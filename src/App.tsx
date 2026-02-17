@@ -33,7 +33,7 @@ import ThermoformedSheetsMarketDashboard from "./pages/ThermoformedSheetsMarketD
 import SeatsMarketDashboard from "./pages/SeatsMarketDashboard";
 import LightingMarketDashboard from "./pages/LightingMarketDashboard";
 import IFECMarketDashboard from "./pages/IFECMarketDashboard";
-import ThermoplasticPrepregDashboard from "./pages/ThermoplasticPrepregDashboard";
+import ThermoplasticPrepregDashboard from "./dashboards/thermoplastic-prepreg/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
