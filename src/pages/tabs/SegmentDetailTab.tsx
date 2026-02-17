@@ -48,17 +48,20 @@ export function SegmentDetailTab({
     return sum + value;
   }, 0);
 
-  const value2025Total = segmentData.reduce((sum, seg) => {
-    const value = seg.data.find((d) => d.year === 2025)?.value ?? 0;
+  const firstYear = marketData.years[0];
+  const lastYear = marketData.years[marketData.years.length - 1];
+
+  const valueFirstTotal = segmentData.reduce((sum, seg) => {
+    const value = seg.data.find((d) => d.year === firstYear)?.value ?? 0;
     return sum + value;
   }, 0);
 
-  const value2034Total = segmentData.reduce((sum, seg) => {
-    const value = seg.data.find((d) => d.year === 2034)?.value ?? 0;
+  const valueLastTotal = segmentData.reduce((sum, seg) => {
+    const value = seg.data.find((d) => d.year === lastYear)?.value ?? 0;
     return sum + value;
   }, 0);
 
-  const cagr = calculateCAGR(value2025Total, value2034Total, 9);
+  const cagr = calculateCAGR(valueFirstTotal, valueLastTotal, lastYear - firstYear);
 
   const SEGMENT_COLORS = [
     "hsl(192, 95%, 55%)",
@@ -460,14 +463,14 @@ export function SegmentDetailTab({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <KPICard
             title={`${selectedYear} Market Size`}
-            value={currentYearTotal / 1000}
-            suffix="B"
+            value={useMillions ? currentYearTotal : currentYearTotal / 1000}
+            suffix={useMillions ? "M" : "B"}
             icon={DollarSign}
             delay={0}
             accentColor="primary"
           />
           <KPICard
-            title="10-Year CAGR"
+            title={`CAGR (${firstYear}-${lastYear})`}
             value={cagr}
             prefix=""
             suffix="%"
@@ -476,9 +479,9 @@ export function SegmentDetailTab({
             accentColor="chart-4"
           />
           <KPICard
-            title="2034 Forecast"
-            value={value2034Total / 1000}
-            suffix="B"
+            title={`${lastYear} Forecast`}
+            value={useMillions ? valueLastTotal : valueLastTotal / 1000}
+            suffix={useMillions ? "M" : "B"}
             icon={TrendingUp}
             delay={0.2}
             accentColor="accent"
