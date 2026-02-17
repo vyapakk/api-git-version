@@ -10,6 +10,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import DatasetDetail from "./pages/DatasetDetail";
 import Terms from "./pages/Terms";
+import Disclaimer from "./pages/Disclaimer";
 import AircraftInteriorsDashboard from "./dashboards/aircraft-interiors/Dashboard";
 import CabinCompositesDashboard from "./dashboards/cabin-composites/Dashboard";
 import SoftGoodsDashboard from "./dashboards/soft-goods/Dashboard";
@@ -53,6 +54,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dataset/:datasetId" element={<DatasetDetail />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/dashboard/aircraft-interiors" element={<AircraftInteriorsDashboard />} />
           <Route path="/dashboard/cabin-composites" element={<CabinCompositesDashboard />} />
           <Route path="/dashboard/soft-goods" element={<SoftGoodsDashboard />} />

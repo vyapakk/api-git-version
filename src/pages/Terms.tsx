@@ -258,18 +258,8 @@ const Terms = () => {
               </span>
             </div>
             <div className="flex items-center gap-6">
-              <a
-                href="mailto:helpdesk@stratviewresearch.com"
-                className="hover:text-foreground transition-colors"
-              >
-                Contact
-              </a>
-              <a
-                href="mailto:support@stratviewresearch.com"
-                className="hover:text-foreground transition-colors"
-              >
-                Support
-              </a>
+              <a href="/disclaimer" className="hover:text-foreground transition-colors">Disclaimer</a>
+              <a href="mailto:support@stratviewresearch.com" className="hover:text-foreground transition-colors">Support</a>
             </div>
           </div>
         </div>
