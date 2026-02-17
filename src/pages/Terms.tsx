@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import DashboardHeader from "@/components/DashboardHeader";
-import stratviewLogo from "@/assets/stratview-logo.png";
+import AppFooter from "@/components/AppFooter";
 
 const sections = [
   {
@@ -242,28 +242,7 @@ const Terms = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border mt-12 py-6">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-3">
-              <img
-                src={stratviewLogo}
-                alt="Stratview Research"
-                className="h-8 w-auto object-contain"
-              />
-              <span>
-                © {new Date().getFullYear()} Stratview Research. All rights
-                reserved.
-              </span>
-            </div>
-            <div className="flex items-center gap-6">
-              <a href="/disclaimer" className="hover:text-foreground transition-colors">Disclaimer</a>
-              <a href="mailto:support@stratviewresearch.com" className="hover:text-foreground transition-colors">Support</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <AppFooter />
     </div>
   );
 };

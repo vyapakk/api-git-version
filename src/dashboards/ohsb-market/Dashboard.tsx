@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { AlertCircle, RefreshCw, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import stratviewLogoWhite from "@/assets/stratview-logo-white.png";
+import AppFooter from "@/components/AppFooter";
 
 import { config, TabType } from "./config";
 import { useMarketData } from "./data";
@@ -75,15 +75,7 @@ const ThermoplasticPrepregDashboard = () => {
 
         {renderTabContent()}
 
-        <motion.footer initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-12 border-t border-border pt-6">
-          <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
-            <div>
-              <p className="text-sm text-muted-foreground">{config.footerText}</p>
-              <p className="text-xs text-muted-foreground/70">{config.footerUnit}</p>
-            </div>
-            <img src={stratviewLogoWhite} alt="Stratview Research" className="h-10 w-auto" />
-          </div>
-        </motion.footer>
+        <AppFooter variant="dark" sourceText={config.footerText} unitText={config.footerUnit} />
       </main>
     </div>
   );
