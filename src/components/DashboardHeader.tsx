@@ -337,6 +337,11 @@ const DashboardHeader = () => {
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate("/my-account")}>
+                <User className="h-4 w-4 mr-2" />
+                My Account
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
                 Log out
               </DropdownMenuItem>
