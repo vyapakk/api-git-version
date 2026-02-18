@@ -29,7 +29,8 @@ export interface DashboardRegistration {
   routePath: string;
   component: ComponentType;
   title: string;
-  catalog?: CatalogEntry;
+  /** One or more catalog entries — allows a dashboard to appear in multiple datasets */
+  catalogs: CatalogEntry[];
 }
 
 // ── Auto-discover all dashboards ──────────────────────────────
@@ -44,6 +45,12 @@ const dashboardModules = import.meta.glob<{ default: ComponentType }>(
   { eager: true }
 );
 
+/** Normalize config.catalog (single object or array) into an array */
+function normalizeCatalog(raw: any): CatalogEntry[] {
+  if (!raw) return [];
+  return Array.isArray(raw) ? raw : [raw];
+}
+
 const registry: DashboardRegistration[] = [];
 
 for (const [path, module] of Object.entries(configModules)) {
@@ -56,7 +63,7 @@ for (const [path, module] of Object.entries(configModules)) {
       routePath: module.config.routePath,
       component: dashboardModule.default,
       title: module.config.title,
-      catalog: module.config.catalog,
+      catalogs: normalizeCatalog(module.config.catalog),
     });
   }
 }
@@ -67,7 +74,7 @@ export const dashboardRegistry = registry;
 
 export const activeDashboardRoutes: Record<string, string> = {};
 for (const entry of registry) {
-  if (entry.catalog) {
-    activeDashboardRoutes[entry.catalog.dashboardId] = entry.routePath;
+  for (const cat of entry.catalogs) {
+    activeDashboardRoutes[cat.dashboardId] = entry.routePath;
   }
 }

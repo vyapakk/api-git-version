@@ -17,13 +17,22 @@
    - `segmentMapping` → maps each tab to a `MarketData` field
    - `backPath`, `backLabel` → back button navigation
    - `footerText`, `footerUnit` → footer content
-   - **`routePath`** → URL path (e.g., `/dashboard/your-market`)
-   - **`catalog`** → auto-registers into the dataset catalog:
-     - `categoryId` → which category it belongs to (e.g., `"aerospace-defense"`)
-     - `datasetId` → which dataset within the category (e.g., `"aircraft-interiors"`)
-     - `dashboardId` → unique ID for this dashboard (e.g., `"ai-your-market"`)
-     - `dashboardName` → display name (optional, defaults to `title`)
-     - `purchased` → access status (optional, defaults to `true`)
+    - **`routePath`** → URL path (e.g., `/dashboard/your-market`)
+    - **`catalog`** → auto-registers into the dataset catalog. Can be a **single object** or an **array** (to appear in multiple datasets):
+      - `categoryId` → which category it belongs to (e.g., `"aerospace-defense"`)
+      - `datasetId` → which dataset within the category (e.g., `"aircraft-interiors"`)
+      - `dashboardId` → unique ID for this dashboard (e.g., `"ai-your-market"`)
+      - `dashboardName` → display name (optional, defaults to `title`)
+      - `purchased` → access status (optional, defaults to `true`)
+
+    **Multi-dataset example** (dashboard appears in two datasets):
+    ```ts
+    catalog: [
+      { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-cabin-composites" },
+      { categoryId: "composites", datasetId: "composites-main", dashboardId: "comp-cabin-composites",
+        datasetName: "Composites Main" },
+    ],
+    ```
 
 3. **Add your JSON data file** to `/public/data/your-market.json`
    - Must follow the compact schema (see `data.ts` types)

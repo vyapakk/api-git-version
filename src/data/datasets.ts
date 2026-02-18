@@ -219,36 +219,34 @@ function mergeRegisteredDashboards() {
   }));
 
   for (const entry of dashboardRegistry) {
-    if (!entry.catalog) continue;
-    const { categoryId, datasetId, dashboardId, dashboardName, purchased,
-      categoryTitle, categoryColor, categoryDescription, datasetName } = entry.catalog;
-    const name = dashboardName || entry.title;
-    const isPurchased = purchased !== false; // default true
+    for (const cat of entry.catalogs) {
+      const { categoryId, datasetId, dashboardId, dashboardName, purchased,
+        categoryTitle, categoryColor, categoryDescription, datasetName } = cat;
+      const name = dashboardName || entry.title;
+      const isPurchased = purchased !== false;
 
-    // Find or create category
-    let cat = result.find(c => c.id === categoryId);
-    if (!cat) {
-      cat = {
-        id: categoryId,
-        title: categoryTitle || categoryId,
-        icon: MoreHorizontal,
-        color: (categoryColor || "teal") as any,
-        description: categoryDescription || "",
-        datasets: [],
-      };
-      result.push(cat);
-    }
+      let category = result.find(c => c.id === categoryId);
+      if (!category) {
+        category = {
+          id: categoryId,
+          title: categoryTitle || categoryId,
+          icon: MoreHorizontal,
+          color: (categoryColor || "teal") as any,
+          description: categoryDescription || "",
+          datasets: [],
+        };
+        result.push(category);
+      }
 
-    // Find or create dataset
-    let ds = cat.datasets.find(d => d.id === datasetId);
-    if (!ds) {
-      ds = { id: datasetId, name: datasetName || datasetId, dashboards: [] };
-      cat.datasets.push(ds);
-    }
+      let ds = category.datasets.find(d => d.id === datasetId);
+      if (!ds) {
+        ds = { id: datasetId, name: datasetName || datasetId, dashboards: [] };
+        category.datasets.push(ds);
+      }
 
-    // Add dashboard if not already present
-    if (!ds.dashboards.find(d => d.id === dashboardId)) {
-      ds.dashboards.push({ id: dashboardId, name, purchased: isPurchased });
+      if (!ds.dashboards.find(d => d.id === dashboardId)) {
+        ds.dashboards.push({ id: dashboardId, name, purchased: isPurchased });
+      }
     }
   }
 
