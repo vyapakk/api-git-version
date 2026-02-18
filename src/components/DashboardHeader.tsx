@@ -125,13 +125,7 @@ const DashboardHeader = () => {
   const handleResultClick = (result: SearchResult) => {
     setSearchQuery("");
     setSearchOpen(false);
-    if (result.type === "dataset") {
-      navigate(`/dataset/${result.datasetId}`);
-    } else if (result.purchased && result.route) {
-      navigate(result.route);
-    } else {
-      navigate(`/dataset/${result.datasetId}`);
-    }
+    navigate(`/dataset/${result.datasetId}`);
   };
 
   const unreadCount = notifications.filter((n) => !n.read).length;
