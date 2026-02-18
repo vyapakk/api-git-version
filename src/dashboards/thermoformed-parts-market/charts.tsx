@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import type { YearlyData, SegmentData } from "./data";
 import { calculateCAGR, useChartDownload } from "./data";
 import { ChartDownloadButton, ChartTableViewToggle, DataTable, AnimatedViewSwitch } from "./ui-helpers";
-import type { TabType } from "./config";
+import { config, type TabType } from "./config";
 
 // ── Shared Colors ─────────────────────────────────────────────
 
@@ -102,7 +102,7 @@ export function MarketOverviewChart({ data, title, subtitle, useMillions = false
         </div>
         <div className="flex items-center gap-1">
           <ChartTableViewToggle view={view} onViewChange={setView} />
-          <ChartDownloadButton onClick={() => downloadChart(chartRef, `market-overview-chart`)} />
+          <ChartDownloadButton onClick={() => downloadChart(chartRef, `market-overview-chart`, `${config.title} — ${title}`)} />
         </div>
       </div>
       <AnimatedViewSwitch view={view}
@@ -223,7 +223,7 @@ export function MarketTrendChart({ data, segments, title, subtitle, showSegments
         </div>
         <div className="flex items-center gap-1">
           <ChartTableViewToggle view={view} onViewChange={setView} />
-          <ChartDownloadButton onClick={() => downloadChart(chartRef, `market-trend-${title.toLowerCase().replace(/\s+/g, "-")}`)} />
+          <ChartDownloadButton onClick={() => downloadChart(chartRef, `market-trend-${title.toLowerCase().replace(/\s+/g, "-")}`, `${config.title} — ${title}`)} />
         </div>
       </div>
       <AnimatedViewSwitch view={view}
@@ -340,7 +340,7 @@ export function SegmentPieChart({ data, year, title, onSegmentClick }: SegmentPi
         </div>
         <div className="flex items-center gap-1">
           <ChartTableViewToggle view={view} onViewChange={setView} />
-          <ChartDownloadButton onClick={() => downloadChart(chartRef, `${title.toLowerCase().replace(/\s+/g, "-")}-${year}`)} />
+          <ChartDownloadButton onClick={() => downloadChart(chartRef, `${title.toLowerCase().replace(/\s+/g, "-")}-${year}`, `${config.title} — ${title} (${year})`)} />
         </div>
       </div>
       <AnimatedViewSwitch view={view}
@@ -559,7 +559,7 @@ export function DrillDownModal({ isOpen, onClose, segmentName, segmentData, colo
           <motion.div ref={trendChartRef} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-lg border border-border bg-secondary/20 p-4">
             <div className="mb-4 flex items-center justify-between">
               <h4 className="text-sm font-semibold text-foreground">Historical & Forecast Trend</h4>
-              <ChartDownloadButton onClick={() => downloadChart(trendChartRef, `${segmentName}-trend`.toLowerCase().replace(/\s+/g, "-"))} />
+              <ChartDownloadButton onClick={() => downloadChart(trendChartRef, `${segmentName}-trend`.toLowerCase().replace(/\s+/g, "-"), `${config.title} — ${segmentName} Trend`)} />
             </div>
             <div className="h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -705,7 +705,7 @@ export function StackedBarChart({ data, year, title, subtitle, segmentColors, se
         </div>
         <div className="flex items-center gap-1">
           <ChartTableViewToggle view={view} onViewChange={setView} />
-          <ChartDownloadButton onClick={() => downloadChart(chartRef, `${title.toLowerCase().replace(/\s+/g, "-")}-${year}`)} />
+          <ChartDownloadButton onClick={() => downloadChart(chartRef, `${title.toLowerCase().replace(/\s+/g, "-")}-${year}`, `${config.title} — ${title} (${year})`)} />
         </div>
       </div>
       <AnimatedViewSwitch view={view}
