@@ -177,11 +177,12 @@ export function useDrillDown() {
 
 const EXPORT_WIDTH = 1920;
 const EXPORT_HEIGHT = 1080;
+const HEADER_HEIGHT = 90;
 const FOOTER_HEIGHT = 60;
 const BG_COLOR = "#0a0f1a";
 
 export function useChartDownload() {
-  const downloadChart = useCallback(async (ref: React.RefObject<HTMLDivElement>, filename: string) => {
+  const downloadChart = useCallback(async (ref: React.RefObject<HTMLDivElement>, filename: string, title?: string) => {
     if (!ref.current) return;
     try {
       const filter = (node: HTMLElement) => {
@@ -196,17 +197,29 @@ export function useChartDownload() {
       ctx.fillStyle = BG_COLOR;
       ctx.fillRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
 
+      // ── Header with title ──
+      if (title) {
+        ctx.fillStyle = "rgba(255,255,255,0.04)";
+        ctx.fillRect(0, 0, EXPORT_WIDTH, HEADER_HEIGHT);
+        ctx.fillStyle = "rgba(255,255,255,0.95)";
+        ctx.font = "bold 28px system-ui, sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(title, 40, 55);
+      }
+
       const chartImg = new Image();
       chartImg.src = chartDataUrl;
       await new Promise((resolve) => { chartImg.onload = resolve; });
-      const padding = 40;
+      const topOffset = title ? HEADER_HEIGHT : 20;
+      const padding = 30;
       const chartAreaWidth = EXPORT_WIDTH - padding * 2;
-      const chartAreaHeight = EXPORT_HEIGHT - FOOTER_HEIGHT - padding * 2;
+      const chartAreaHeight = EXPORT_HEIGHT - topOffset - FOOTER_HEIGHT - padding;
       const scale = Math.min(chartAreaWidth / chartImg.width, chartAreaHeight / chartImg.height);
       const drawW = chartImg.width * scale;
       const drawH = chartImg.height * scale;
-      ctx.drawImage(chartImg, (EXPORT_WIDTH - drawW) / 2, padding + (chartAreaHeight - drawH) / 2, drawW, drawH);
+      ctx.drawImage(chartImg, (EXPORT_WIDTH - drawW) / 2, topOffset + (chartAreaHeight - drawH) / 2, drawW, drawH);
 
+      // ── Footer ──
       ctx.fillStyle = "rgba(255,255,255,0.05)";
       ctx.fillRect(0, EXPORT_HEIGHT - FOOTER_HEIGHT, EXPORT_WIDTH, FOOTER_HEIGHT);
 
