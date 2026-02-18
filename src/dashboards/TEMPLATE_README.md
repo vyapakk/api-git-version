@@ -2,7 +2,7 @@
 
 ## Steps
 
-1. **Copy the template folder**
+1. **Copy an existing dashboard folder**
    ```
    cp -r src/dashboards/thermoplastic-prepreg src/dashboards/your-new-dashboard
    ```
@@ -17,24 +17,45 @@
    - `segmentMapping` → maps each tab to a `MarketData` field
    - `backPath`, `backLabel` → back button navigation
    - `footerText`, `footerUnit` → footer content
+   - **`routePath`** → URL path (e.g., `/dashboard/your-market`)
+   - **`catalog`** → auto-registers into the dataset catalog:
+     - `categoryId` → which category it belongs to (e.g., `"aerospace-defense"`)
+     - `datasetId` → which dataset within the category (e.g., `"aircraft-interiors"`)
+     - `dashboardId` → unique ID for this dashboard (e.g., `"ai-your-market"`)
+     - `dashboardName` → display name (optional, defaults to `title`)
+     - `purchased` → access status (optional, defaults to `true`)
 
 3. **Add your JSON data file** to `/public/data/your-market.json`
    - Must follow the compact schema (see `data.ts` types)
 
-4. **Add a route** in `src/App.tsx`:
-   ```tsx
-   import YourDashboard from "./dashboards/your-new-dashboard/Dashboard";
-   // ...
-   <Route path="/dashboard/your-market" element={<YourDashboard />} />
-   ```
+4. **Done!** No other files need editing. The dashboard is auto-discovered via:
+   - `registry.ts` → scans all dashboard folders at build time
+   - `App.tsx` → routes are auto-registered
+   - `dashboardRoutes.ts` → route map is auto-generated
+   - `datasets.ts` → catalog entries are auto-merged
 
-5. **Register in datasets** (optional) in `src/data/datasets.ts`
+## For a NEW Category or Dataset
+
+If your dashboard belongs to a category/dataset that doesn't exist yet,
+add these optional fields to the `catalog` object in `config.ts`:
+
+```ts
+catalog: {
+  categoryId: "new-category",
+  categoryTitle: "New Category",       // Display title
+  categoryColor: "teal",               // "teal" | "navy" | "mint" | "teal-dark"
+  categoryDescription: "Description",  // Shown on category card
+  datasetId: "new-dataset",
+  datasetName: "New Dataset",          // Display name
+  dashboardId: "nc-main",
+},
+```
 
 ## File Structure
 
 ```
 src/dashboards/your-new-dashboard/
-  config.ts              ← EDIT THIS (all settings)
+  config.ts              ← EDIT THIS (all settings + routing + catalog)
   Dashboard.tsx           ← Main page (reads config, no changes needed)
   data.ts                 ← Types + hooks (no changes needed)
   layout.tsx              ← Header, nav, skeleton (no changes needed)

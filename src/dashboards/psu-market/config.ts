@@ -40,4 +40,6 @@ export const config = {
     application: { dataKey: "application",        title: "Equipment Type" },
     equipment:   { dataKey: "furnishedEquipment", title: "Component Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/psu-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-psu" },
 } as const;

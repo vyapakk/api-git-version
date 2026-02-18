@@ -28,4 +28,6 @@ export const config = {
     equipment: { dataKey: "furnishedEquipment", title: "Core Material Type" }, process: { dataKey: "processType", title: "Fastener Type" },
     material: { dataKey: "materialType", title: "Material Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/potted-inserts-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-potted-inserts" },
 } as const;

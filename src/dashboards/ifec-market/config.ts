@@ -25,4 +25,6 @@ export const config = {
     region: { dataKey: "region", title: "Region" }, application: { dataKey: "application", title: "Product Type" },
     equipment: { dataKey: "furnishedEquipment", title: "Equipment Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/ifec-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-ifec" },
 } as const;

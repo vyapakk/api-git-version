@@ -75,4 +75,6 @@ export const config = {
     equipment:    { dataKey: "furnishedEquipment", title: "Fiber Type" },
     process:      { dataKey: "processType",        title: "Process Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/thermoplastic-prepreg-market",
+  catalog: { categoryId: "prepregs", datasetId: "prepregs", dashboardId: "pp-thermoplastic" },
 } as const;

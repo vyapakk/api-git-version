@@ -28,4 +28,6 @@ export const config = {
     region: { dataKey: "region", title: "Region" }, application: { dataKey: "application", title: "Stowage Type" },
     equipment: { dataKey: "furnishedEquipment", title: "Furnished Equipment Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/stowages-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-stowages" },
 } as const;

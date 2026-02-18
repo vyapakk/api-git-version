@@ -42,4 +42,6 @@ export const config = {
     equipment:   { dataKey: "furnishedEquipment", title: "Furnished Equipment Type" },
     process:     { dataKey: "processType",        title: "Insert Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/galley-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-galley" },
 } as const;

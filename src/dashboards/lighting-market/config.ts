@@ -26,4 +26,6 @@ export const config = {
     region: { dataKey: "region", title: "Region" }, application: { dataKey: "application", title: "Light Type" },
     equipment: { dataKey: "furnishedEquipment", title: "Equipment Type" }, material: { dataKey: "materialType", title: "Product Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/lighting-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-lighting" },
 } as const;

@@ -25,4 +25,6 @@ export const config = {
     region: { dataKey: "region", title: "Region" }, application: { dataKey: "application", title: "Application Type" },
     equipment: { dataKey: "furnishedEquipment", title: "Furnished Equipment Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/cabin-interiors-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-cabin-interiors" },
 } as const;

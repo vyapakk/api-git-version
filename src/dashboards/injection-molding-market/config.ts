@@ -25,4 +25,6 @@ export const config = {
     region: { dataKey: "region", title: "Region" }, material: { dataKey: "materialType", title: "Material Type" },
     endUser: { dataKey: "endUser", title: "End User" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/injection-molding-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-injection-molding" },
 } as const;

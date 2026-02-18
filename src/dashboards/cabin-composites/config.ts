@@ -42,4 +42,6 @@ export const config = {
     equipment:   { dataKey: "furnishedEquipment", title: "Composites Type" },
     process:     { dataKey: "processType",        title: "Process Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/cabin-composites",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-cabin-composites" },
 } as const;

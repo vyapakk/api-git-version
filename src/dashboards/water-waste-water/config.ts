@@ -42,4 +42,6 @@ export const config = {
     equipment:   { dataKey: "furnishedEquipment", title: "Equipment Type" },
     process:     { dataKey: "processType",        title: "Component Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/water-waste-water",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-water-waste" },
 } as const;

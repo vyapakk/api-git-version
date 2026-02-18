@@ -26,4 +26,6 @@ export const config = {
     region: { dataKey: "region", title: "Region" }, application: { dataKey: "application", title: "Seat Class Type" },
     equipment: { dataKey: "furnishedEquipment", title: "Component" }, material: { dataKey: "materialType", title: "Sales Channel Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/seats-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-seats" },
 } as const;

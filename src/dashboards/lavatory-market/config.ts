@@ -40,4 +40,6 @@ export const config = {
     application: { dataKey: "application",        title: "Lavatory Type" },
     equipment:   { dataKey: "furnishedEquipment", title: "Furnished Equipment Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/lavatory-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-lavatory" },
 } as const;

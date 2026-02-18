@@ -1,4 +1,5 @@
 import { Layers, Plane, Car, Building2, MoreHorizontal } from "lucide-react";
+import { dashboardRegistry } from "@/dashboards/registry";
 
 /**
  * BACKEND INTEGRATION POINT: Dataset Categories & Purchase Status
@@ -13,8 +14,22 @@ import { Layers, Plane, Car, Building2, MoreHorizontal } from "lucide-react";
  * - Dataset listing (DatasetList.tsx): Shows lock if NO dashboards are purchased
  * - Subscriptions (SubscriptionsSection.tsx): Shows dataset if ANY dashboard is purchased
  * - Detail page (DatasetDetail.tsx): Per-dashboard lock icon and access request
+ * 
+ * DASHBOARD AUTO-DISCOVERY:
+ * Real dashboards are auto-registered from each dashboard's config.ts `catalog` field.
+ * Only placeholder/future dashboards need to be listed here manually.
  */
-export const categories = [
+
+// Icon lookup for auto-created categories
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Layers, Plane, Car, Building2, MoreHorizontal,
+};
+
+// ── Base category definitions ─────────────────────────────────
+// Placeholder dashboards (no real dashboard folder) stay here.
+// Real dashboards are auto-merged from the registry below.
+
+const baseCategories = [
   {
     id: "composites",
     title: "Composites",
@@ -60,32 +75,8 @@ export const categories = [
       {
         id: "aircraft-interiors",
         name: "Aircraft Interiors",
-        dashboards: [
-          { id: "ai-global", name: "Global Aircraft Interiors Market", purchased: true },
-          { id: "ai-cabin-composites", name: "Aircraft Cabin Interior Composites Market", purchased: true },
-          { id: "ai-soft-goods", name: "Aircraft Soft Goods Market", purchased: true },
-          { id: "ai-water-waste", name: "Aircraft Water/Waste Water Market", purchased: true },
-          { id: "ai-galley", name: "Aircraft Galley Market", purchased: true },
-          { id: "ai-psu", name: "Aircraft PSU Market", purchased: true },
-          { id: "ai-lavatory", name: "Aircraft Lavatory Market", purchased: true },
-          { id: "ai-ohsb", name: "Aircraft OHSB Market", purchased: true },
-          { id: "ai-stowages", name: "Aircraft Stowages Market", purchased: true },
-          { id: "ai-floor-panels", name: "Aircraft Floor Panels Market", purchased: true },
-          { id: "ai-cargo-liner", name: "Aircraft Cargo Liner Market", purchased: true },
-          { id: "ai-cabin-lining", name: "Aircraft Cabin Lining Market", purchased: true },
-          { id: "ai-cabin-interiors", name: "Aircraft Cabin Interiors Market", purchased: true },
-          { id: "ai-sandwich-panels", name: "Aircraft Interior Sandwich Panels Market", purchased: true },
-          { id: "ai-potted-inserts", name: "Aircraft Potted Inserts Market", purchased: true },
-          { id: "ai-non-sandwich-panels", name: "Aircraft Interior Non-Sandwich Panel Composites Market", purchased: true },
-          { id: "ai-extrusion", name: "Aircraft Interiors Extrusion Market", purchased: true },
-          { id: "ai-thermoformed-parts", name: "Aircraft Interior Thermoformed Parts Market", purchased: true },
-          { id: "ai-plastic", name: "Aircraft Interiors Plastic Market", purchased: true },
-          { id: "ai-injection-molding", name: "Aircraft Interiors Injection Molding & Others Market", purchased: true },
-          { id: "ai-thermoformed-sheets", name: "Aircraft Interior Thermoformed Sheets Market", purchased: true },
-          { id: "ai-seats", name: "Aircraft Seats Market", purchased: true },
-          { id: "ai-lighting", name: "Aircraft Interior Lighting Market", purchased: true },
-          { id: "ai-ifec", name: "Aircraft IFEC Market", purchased: true },
-        ],
+        dashboards: [] as { id: string; name: string; purchased: boolean }[],
+        // ↑ Real dashboards auto-merged from registry
       },
       {
         id: "commercial-aircraft",
@@ -176,9 +167,8 @@ export const categories = [
       {
         id: "prepregs",
         name: "Prepregs",
-        dashboards: [
-          { id: "pp-thermoplastic", name: "Thermoplastic Prepreg Market", purchased: true },
-        ],
+        dashboards: [] as { id: string; name: string; purchased: boolean }[],
+        // ↑ Real dashboards auto-merged from registry
       },
     ],
   },
@@ -215,3 +205,54 @@ export const categories = [
     ],
   },
 ];
+
+// ── Auto-merge discovered dashboards ──────────────────────────
+
+function mergeRegisteredDashboards() {
+  // Deep clone base categories
+  const result = baseCategories.map(cat => ({
+    ...cat,
+    datasets: cat.datasets.map(ds => ({
+      ...ds,
+      dashboards: [...ds.dashboards],
+    })),
+  }));
+
+  for (const entry of dashboardRegistry) {
+    if (!entry.catalog) continue;
+    const { categoryId, datasetId, dashboardId, dashboardName, purchased,
+      categoryTitle, categoryColor, categoryDescription, datasetName } = entry.catalog;
+    const name = dashboardName || entry.title;
+    const isPurchased = purchased !== false; // default true
+
+    // Find or create category
+    let cat = result.find(c => c.id === categoryId);
+    if (!cat) {
+      cat = {
+        id: categoryId,
+        title: categoryTitle || categoryId,
+        icon: MoreHorizontal,
+        color: (categoryColor || "teal") as any,
+        description: categoryDescription || "",
+        datasets: [],
+      };
+      result.push(cat);
+    }
+
+    // Find or create dataset
+    let ds = cat.datasets.find(d => d.id === datasetId);
+    if (!ds) {
+      ds = { id: datasetId, name: datasetName || datasetId, dashboards: [] };
+      cat.datasets.push(ds);
+    }
+
+    // Add dashboard if not already present
+    if (!ds.dashboards.find(d => d.id === dashboardId)) {
+      ds.dashboards.push({ id: dashboardId, name, purchased: isPurchased });
+    }
+  }
+
+  return result;
+}
+
+export const categories = mergeRegisteredDashboards();

@@ -40,4 +40,6 @@ export const config = {
     equipment:   { dataKey: "furnishedEquipment", title: "Material Type" },
     endUser:     { dataKey: "endUser",            title: "End User" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/soft-goods",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-soft-goods" },
 } as const;

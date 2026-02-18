@@ -26,4 +26,6 @@ export const config = {
     aircraft: { dataKey: "aircraftType", title: "Aircraft Type" }, region: { dataKey: "region", title: "Region" },
     material: { dataKey: "materialType", title: "Material Type" }, endUser: { dataKey: "endUser", title: "End User" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/plastic-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-plastic" },
 } as const;

@@ -26,4 +26,6 @@ export const config = {
     endUser: { dataKey: "endUser", title: "End-User Type" }, aircraft: { dataKey: "aircraftType", title: "Aircraft Type" },
     region: { dataKey: "region", title: "Region" }, equipment: { dataKey: "furnishedEquipment", title: "Equipment Type" },
   } as Record<string, { dataKey: string; title: string }>,
+  routePath: "/dashboard/cargo-liner-market",
+  catalog: { categoryId: "aerospace-defense", datasetId: "aircraft-interiors", dashboardId: "ai-cargo-liner" },
 } as const;
