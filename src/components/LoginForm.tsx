@@ -110,7 +110,7 @@ const LoginForm = () => {
       await new Promise((r) => setTimeout(r, 600));
 
       toast.success("OTP sent", {
-        description: "We've sent a verification code to your registered email and mobile.",
+        description: "We've sent a verification code to your registered email.",
       });
       setOtpStep("verify");
       setResendCountdown(30);
@@ -203,12 +203,12 @@ const LoginForm = () => {
         <form onSubmit={otpStep === "request" ? handleSendOtp : handleVerifyOtp} className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="identifier" className="text-sm font-medium text-foreground">
-              Email or Mobile Number
+              Email Address
             </Label>
             <Input
               id="identifier"
-              type="text"
-              placeholder="name@company.com or +91 98xxxxxxxx"
+              type="email"
+              placeholder="name@company.com"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               disabled={otpStep === "verify"}
@@ -216,7 +216,7 @@ const LoginForm = () => {
               required
             />
             <p className="text-xs text-muted-foreground">
-              We'll send a verification code to your registered email and mobile.
+              We'll send a verification code to your registered email.
             </p>
           </div>
 
@@ -246,7 +246,7 @@ const LoginForm = () => {
                   }}
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Change number
+                  Change email
                 </button>
                 <button
                   type="button"
