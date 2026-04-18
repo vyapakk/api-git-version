@@ -100,13 +100,27 @@ const LoginForm = () => {
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!identifier.trim()) {
-      toast.error("Please enter your email or mobile number.");
+      toast.error("Please enter your email address.");
       return;
     }
     setOtpSending(true);
     try {
       // TODO (developer): replace with real API call
-      // await apiService.post(ENDPOINTS.AUTH.SEND_LOGIN_OTP, { identifier });
+      // const res = await apiService.post(ENDPOINTS.AUTH.SEND_LOGIN_OTP, { identifier });
+      // Expected backend behaviour:
+      //   • 200 { success: true }            → OTP sent
+      //   • 404 { error: "not_registered" }  → email not in system
+      //   • 4xx/5xx                          → generic failure
+      //
+      // if (res.status === 404) {
+      //   toast.error("Email not registered", {
+      //     description: "We couldn't find an account with that email. Please sign up.",
+      //     action: { label: "Sign up", onClick: () => navigate("/signup") },
+      //   });
+      //   return;
+      // }
+      // if (!res.ok) throw new Error("send_failed");
+
       await new Promise((r) => setTimeout(r, 600));
 
       toast.success("OTP sent", {
@@ -114,8 +128,16 @@ const LoginForm = () => {
       });
       setOtpStep("verify");
       setResendCountdown(30);
-    } catch (err) {
-      toast.error("Could not send OTP", { description: "Please try again in a moment." });
+    } catch (err: any) {
+      const msg = (err?.message || "").toLowerCase();
+      if (msg.includes("not_registered") || msg.includes("not registered") || msg.includes("404")) {
+        toast.error("Email not registered", {
+          description: "We couldn't find an account with that email. Please sign up.",
+          action: { label: "Sign up", onClick: () => navigate("/signup") },
+        });
+      } else {
+        toast.error("Could not send OTP", { description: "Please try again in a moment." });
+      }
     } finally {
       setOtpSending(false);
     }
