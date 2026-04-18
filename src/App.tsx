@@ -44,7 +44,7 @@ const AppContent = () => {
   return (
     <TooltipProvider>
       <Sonner />
-      <BrowserRouter basename={import.meta.env.DEV ? "/" : "/react_site"}>
+      <BrowserRouter>
         <RouteScrollToTop />
         <QueryFormTab />
         <Routes>
