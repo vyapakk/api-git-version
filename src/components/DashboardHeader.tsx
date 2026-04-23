@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logoutUser } from "@/store/slices/authSlice";
 import { searchDashboards, clearSearchResults, SearchResult } from "@/store/slices/searchSlice";
-import { 
-  fetchNotifications, 
-  markAsRead as markAsReadAction, 
-  markAllAsRead as markAllAsReadAction, 
-  dismissNotification as dismissNotificationAction,
-  Notification 
+import {
+  fetchNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+  dismissNotificationThunk,
+  Notification
 } from "@/store/slices/notificationSlice";
 import { Bell, Search, User, Check, X, BarChart3, Database, Lock, Loader2, BellRing, AlertTriangle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -106,15 +106,15 @@ const DashboardHeader = () => {
   const unreadCount = notifications.filter((n: Notification) => !n.read).length;
 
   const markAsRead = (id: string) => {
-    dispatch(markAsReadAction(id));
+    dispatch(markNotificationRead(id));
   };
 
   const markAllAsRead = () => {
-    dispatch(markAllAsReadAction());
+    dispatch(markAllNotificationsRead());
   };
 
   const dismissNotification = (id: string) => {
-    dispatch(dismissNotificationAction(id));
+    dispatch(dismissNotificationThunk(id));
   };
 
   const getTypeIcon = (type: Notification["type"]) => {

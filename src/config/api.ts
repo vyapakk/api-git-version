@@ -27,5 +27,12 @@ export const ENDPOINTS = {
         SUBSCRIPTIONS: `${API_BASE_URL}/react/user-subscriptions`,
         SEARCH: `${API_BASE_URL}/react/search`,
         NOTIFICATIONS: `${API_BASE_URL}/react/notifications`,
+        // Per-user notification state (backend must persist these in a user_notification_state table)
+        // POST { notification_id } – mark single notification as read for the authenticated user
+        NOTIFICATION_MARK_READ: `${API_BASE_URL}/react/notifications/mark-read`,
+        // POST – mark all notifications as read for the authenticated user
+        NOTIFICATION_MARK_ALL_READ: `${API_BASE_URL}/react/notifications/mark-all-read`,
+        // POST { notification_id } – soft-delete (dismiss) for the authenticated user only
+        NOTIFICATION_DISMISS: `${API_BASE_URL}/react/notifications/dismiss`,
     }
 };
