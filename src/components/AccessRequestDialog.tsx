@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Lock } from "lucide-react";
 import {
   Dialog,
@@ -10,10 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { CountrySelector } from "@/components/CountrySelector";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { submitInquiry, resetInquiryStatus } from "@/store/slices/subscriptionSlice";
-import { useEffect } from "react";
+import { parsePhone } from "@/lib/phoneUtils";
 
 interface AccessRequestDialogProps {
   open: boolean;
@@ -27,39 +28,41 @@ const AccessRequestDialog = ({ open, onOpenChange, datasetName, dashboardSlug }:
   const { user } = useAppSelector((state: any) => state.auth);
   const { inquiryStatus } = useAppSelector((state: any) => state.subscriptions);
 
-  const [form, setForm] = useState({
-    name: user?.name || "",
-    designation: "",
-    company: "Stratview Research",
-    email: user?.email || "",
-    mobile: "",
-  });
+  const [name, setName] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneCode, setPhoneCode] = useState("+1");
+  const [phoneNum, setPhoneNum] = useState("");
 
+  // Re-sync from profile each time the dialog opens
   useEffect(() => {
-    if (!open) {
+    if (open) {
+      setName(user?.name || "");
+      setDesignation(user?.designation || "");
+      setCompany(user?.company || "");
+      setEmail(user?.email || "");
+      const { code, number } = parsePhone(user?.phone_number);
+      setPhoneCode(code);
+      setPhoneNum(number);
       dispatch(resetInquiryStatus());
     }
-  }, [open, dispatch]);
+  }, [open, user, dispatch]);
 
   useEffect(() => {
     if (inquiryStatus === 'success' && open) {
       toast.success("Your request has been submitted. Our team will get in touch with you shortly.");
       onOpenChange(false);
-      setForm({ name: user?.name || "", designation: "", company: "", email: user?.email || "", mobile: "" });
     } else if (inquiryStatus === 'failed') {
       toast.error("Failed to submit inquiry. Please try again.");
     }
-  }, [inquiryStatus, open, onOpenChange, user]);
+  }, [inquiryStatus, open, onOpenChange]);
 
   const submitting = inquiryStatus === 'loading';
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.mobile) {
+    if (!name || !email || !phoneNum) {
       toast.error("Please fill in required fields.");
       return;
     }
@@ -69,10 +72,18 @@ const AccessRequestDialog = ({ open, onOpenChange, datasetName, dashboardSlug }:
       return;
     }
 
+    const formDetails = {
+      name,
+      designation,
+      company,
+      email,
+      mobile: `${phoneCode}${phoneNum}`,
+    };
+
     dispatch(submitInquiry({
       user_id: user.id,
       dashboard_slug: dashboardSlug,
-      message: `Access Request Details for ${datasetName}: ${JSON.stringify(form)}`,
+      message: `Access Request Details for ${datasetName}: ${JSON.stringify(formDetails)}`,
       type: 'access_request'
     }));
   };
@@ -91,57 +102,76 @@ const AccessRequestDialog = ({ open, onOpenChange, datasetName, dashboardSlug }:
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-            <div className="space-y-2">
-              <Label htmlFor="access-name">Name</Label>
-              <Input
-                id="access-name"
-                placeholder="Your full name"
-                value={form.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-                maxLength={100}
-              />
+            <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Your Profile</p>
+              <div className="space-y-2">
+                <Label htmlFor="access-name" className="text-muted-foreground text-xs">Name</Label>
+                <Input
+                  id="access-name"
+                  placeholder="Your full name"
+                  value={name}
+                  readOnly={!!user?.name}
+                  onChange={(e) => setName(e.target.value)}
+                  className={user?.name ? "bg-muted/50 text-foreground cursor-default" : ""}
+                  maxLength={100}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="access-designation" className="text-muted-foreground text-xs">Designation</Label>
+                <Input
+                  id="access-designation"
+                  placeholder="Your designation"
+                  value={designation}
+                  readOnly={!!user?.designation}
+                  onChange={(e) => setDesignation(e.target.value)}
+                  className={user?.designation ? "bg-muted/50 text-foreground cursor-default" : ""}
+                  maxLength={100}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="access-company" className="text-muted-foreground text-xs">Company</Label>
+                <Input
+                  id="access-company"
+                  placeholder="Your company name"
+                  value={company}
+                  readOnly={!!user?.company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  className={user?.company ? "bg-muted/50 text-foreground cursor-default" : ""}
+                  maxLength={100}
+                />
+              </div>
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="access-designation">Designation</Label>
-              <Input
-                id="access-designation"
-                placeholder="Your designation"
-                value={form.designation}
-                onChange={(e) => handleChange("designation", e.target.value)}
-                maxLength={100}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="access-company">Company</Label>
-              <Input
-                id="access-company"
-                placeholder="Your company name"
-                value={form.company}
-                onChange={(e) => handleChange("company", e.target.value)}
-                maxLength={100}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="access-email">Official Email</Label>
+              <Label htmlFor="access-email" className="text-foreground text-sm">Official Email *</Label>
               <Input
                 id="access-email"
                 type="email"
                 placeholder="you@company.com"
-                value={form.email}
-                onChange={(e) => handleChange("email", e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 maxLength={255}
+                required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="access-mobile">Mobile Number</Label>
-              <Input
-                id="access-mobile"
-                type="tel"
-                placeholder="+1 234 567 890"
-                value={form.mobile}
-                onChange={(e) => handleChange("mobile", e.target.value)}
-                maxLength={20}
-              />
+              <Label htmlFor="access-mobile" className="text-foreground text-sm">Mobile Number *</Label>
+              <div className="flex gap-0">
+                <CountrySelector
+                  value={phoneCode}
+                  onValueChange={setPhoneCode}
+                  className="rounded-r-none border-r-0 bg-muted/20 focus:ring-0 focus:ring-offset-0"
+                />
+                <Input
+                  id="access-mobile"
+                  type="tel"
+                  placeholder="123-456-7890"
+                  value={phoneNum}
+                  onChange={(e) => setPhoneNum(e.target.value)}
+                  maxLength={20}
+                  className="rounded-l-none focus-visible:ring-1"
+                />
+              </div>
             </div>
             <Button type="submit" className="w-full mt-2" disabled={submitting}>
               {submitting ? "Submitting..." : "Submit Request"}
