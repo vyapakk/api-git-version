@@ -352,8 +352,68 @@ const MyAccount = () => {
               </div>
             ) : (
               <form onSubmit={handleInquirySubmit} className="space-y-5">
+                <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Your Profile</p>
+                  <div className="space-y-2">
+                    <Label className="text-muted-foreground text-xs">Name</Label>
+                    <Input
+                      value={user?.name || ""}
+                      readOnly={!!user?.name}
+                      className={user?.name ? "bg-muted/50 text-foreground cursor-default" : ""}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-muted-foreground text-xs">Designation</Label>
+                    <Input
+                      value={user?.designation || ""}
+                      readOnly={!!user?.designation}
+                      placeholder="Not provided"
+                      className={user?.designation ? "bg-muted/50 text-foreground cursor-default" : ""}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-muted-foreground text-xs">Company</Label>
+                    <Input
+                      value={user?.company || ""}
+                      readOnly={!!user?.company}
+                      placeholder="Not provided"
+                      className={user?.company ? "bg-muted/50 text-foreground cursor-default" : ""}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium">Which dashboard are you interested in?</Label>
+                  <Label htmlFor="inq-email" className="text-sm font-medium">Email *</Label>
+                  <Input
+                    id="inq-email"
+                    type="email"
+                    value={user?.email || ""}
+                    readOnly
+                    className="bg-muted/50 text-foreground cursor-default"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="inq-phone" className="text-sm font-medium">Phone</Label>
+                  <div className="flex gap-0">
+                    <CountrySelector
+                      value={phoneCode}
+                      onValueChange={setPhoneCode}
+                      className="rounded-r-none border-r-0 bg-muted/20 focus:ring-0 focus:ring-offset-0"
+                    />
+                    <Input
+                      id="inq-phone"
+                      type="tel"
+                      value={phoneNum}
+                      onChange={(e) => setPhoneNum(e.target.value)}
+                      placeholder="123-456-7890"
+                      className="rounded-l-none focus-visible:ring-1 h-10 flex-1"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Which dashboard are you interested in? *</Label>
                   <Select value={inquiry.dashboard} onValueChange={(v) => setInquiry({ ...inquiry, dashboard: v })}>
                     <SelectTrigger className="h-10">
                       <SelectValue placeholder="Select a dashboard..." />
